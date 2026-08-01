@@ -1,0 +1,15 @@
+{% autoescape off %}
+
+Hi {{ user.name }}
+
+please click on the link below to confirm your registration
+
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+
+if you did not make this request, please ignore this email
+
+thank you for using our site!
+
+{% endautoescape %}
+
+path('activate/<uidb64>/<token>/', views.activate, name='activate')

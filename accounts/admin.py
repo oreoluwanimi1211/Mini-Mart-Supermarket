@@ -3,7 +3,7 @@ from .models import CustomUser, UserProfile
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('email', 'username', 'phone_number', 'is_active')
+    list_display = ('email', 'username', 'phone_number', 'is_active', 'is_staff', 'date_joined', 'last_login')
 
 class UserprofileAdmin(admin.ModelAdmin):
     list_display = ('user__username', 'address','user__email', 'user__phone_number')
