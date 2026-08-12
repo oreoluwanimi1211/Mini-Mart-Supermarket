@@ -19,6 +19,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
     last_login = models.DateTimeField(auto_now_add=True)
+    is_admin = models.BooleanField(default=False)
+
 
     objects = CustomUserManager()
     USERNAME_FIELD = 'email'
@@ -26,6 +28,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
