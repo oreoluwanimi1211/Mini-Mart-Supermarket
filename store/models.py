@@ -26,7 +26,7 @@ class Product(models.Model):
 
 
     def __str__(self):
-        return self.product_name
+        return str(self.product_name)
 
 class VariationManager(models.Manager):
     def color(self):

@@ -4,16 +4,16 @@
 
 
 <!-- ========================= SECTION PAGETOP ========================= -->
-<!-- <section class="section-pagetop bg">
-<div class="container">
-{% if 'search' in request.path %}
-	<h2 class="title-page">Search Result</h2>
- {% else %}
-	<h2 class="title-page">Our Store</h2>
-{% endif %} -->
-	
-</div> <!-- container //  -->
-<!-- </section> -->
+<section class="section-pagetop bg">
+	<div class="container">
+		{% if 'search' in request.path %}
+			<h2 class="title-page">Search Result</h2>
+		{% else %}
+			<h2 class="title-page">Our Store</h2>
+		{% endif %}
+		
+	</div> <!-- container //  -->
+</section>
 <!-- ========================= SECTION INTRO END// ========================= -->
 
 <!-- ========================= SECTION CONTENT ========================= -->
@@ -51,31 +51,8 @@
 
 			</div> <!-- card-body.// -->
 		</div>
-	<article class="filter-group">
 
-		<header class="card-header">
-			<a href="#" data-toggle="collapse" data-target="#collapse_3" aria-expanded="true" class="">
-				<i class="icon-control fa fa-chevron-down"></i>
-				<h6 class="title">Price range </h6>
-			</a>
-		</header>
-		<div class="filter-content collapse show" id="collapse_3" style="">
-			<div class="card-body">
-				<input type="range" class="custom-range" min="0" max="100" name="">
-				<div class="form-row">
-				<div class="form-group col-md-6">
-				  <label>Min</label>
-				  <input class="form-control" placeholder="$0" type="number">
-				</div>
-				<div class="form-group text-right col-md-6">
-				  <label>Max</label>
-				  <input class="form-control" placeholder="$1,0000" type="number">
-				</div>
-				</div> <!-- form-row.// -->
-				<button class="btn btn-block btn-primary">Apply</button>
-			</div><!-- card-body.// -->
-		</div>
-	</article> <!-- filter-group .// -->
+
 	
 	<article class="filter-group">
 		<header class="card-header">
@@ -128,43 +105,44 @@
 			<figcaption class="info-wrap">
 				<a href="{{ product.get_url }}" class="title">{{ product.product_name }}</a>
 				<div class="price mt-1">$ {{product.price}}</div> <!-- price-wrap.// -->
-				<a href="{{ product.get_url }}" class="btn btn-block btn-primary">View Details</a>
+				<a href="{% url 'add_cart' product.id %}" class="btn btn-block btn-primary">Add to Cart</a>
 			</figcaption>
 		</div>
 	</div> <!-- col.// -->
 	{% endfor %}
+
+
 	
 </div> <!-- row.// -->
 </div><!-- container // -->
+<nav class="mb-4" aria-label="Page navigation sample">
+	{% if products.has_other_pages %}
+		<ul class="pagination">
+			{% if products.has_previous %}
+			<li class="page-item"><a class="page-link" href="?page={{products.previous_page_number}}">Previous</a></li>
+			{% else %}
+			<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+			{% endif %}
 
-
-<nav class="mt-4"  aria-label="Page navigation sample">
-{% if products.has_other_pages %}
-  <ul class="pagination">
-	{% if products.has_previous %}
-    <li class="page-item"><a class="page-link" href="?page={{products.previous_page_number}}">Previous</a></li>
-	{% else %}
-	<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+			{%for i in products.paginator.page_range%}
+				{%if products.number == i %}
+				<li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+				{% else %}
+				<li class="page-item "><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+			{% endif %}
+			{% endfor %}
+			
+			{% if products.has_next %}
+			<li class="page-item"><a class="page-link" href="?page={{products.next_page_number}}">Next</a></li>
+			{% else %}
+			<li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+			{% endif %}
+		</ul>
 	{% endif %}
-
-	{% for i in products.paginator.page_range %}
-		{% if products.number == i %}
-    		<li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
-		{% else %}
-		     <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
-	    {% endif %}
-	{% endfor %}
-
-	{% if products.has_next %}
-    	<li class="page-item"><a class="page-link" href="?page={{ products.next_page_number}}">Next</a></li>
-	{% else %}
-	    <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
-	{% endif %}
-  </ul>
-{% endif %}
 </nav>
 
-	</main> <!-- col.// -->
+
+</main> <!-- col.// -->
 
 </div>
 

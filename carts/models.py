@@ -3,11 +3,11 @@ from store.models import Product, Variation
 from accounts.models import CustomUser
 
 class Cart(models.Model):
-    cart_id      = models.CharField(max_length=250, blank=True, null=True)
+    cart_id      = models.CharField(max_length=250, blank=True)
     date_added   = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return self.cart_id
+        return str(self.cart_id)
     
 class CartItem(models.Model):
     user           = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
@@ -18,6 +18,8 @@ class CartItem(models.Model):
     is_active      = models.BooleanField(default=True)
     time_added     = models.TimeField(auto_now_add=True)
 
+    def subtotal(self):
+        return self.product.price * self.quantity
     
     def __str__(self):
         return str(self.product)
