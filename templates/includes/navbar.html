@@ -46,14 +46,14 @@
 				</a> <!-- brand-wrap.// -->
 			</div>
 			<div class="col-xl-6 col-lg-5 col-md-6">
-				<form action="#" class="search-header">
+				<form action="{% url 'search' %}" class="search-header" method="GET">
 					<div class="input-group w-100">
-						<select class="custom-select border-right"  name="category_name">
+						<!-- <select class="custom-select border-right"  name="category_name">
 								<option value="">All type</option><option value="codex">Special</option>
 								<option value="comments">Only best</option>
 								<option value="content">Latest</option>
-						</select>
-					    <input type="text" class="form-control" placeholder="Search">
+						</select> -->
+					    <input type="text" class="form-control" placeholder="Search" name="keyword">
 					    
 					    <div class="input-group-append">
 					      <button class="btn btn-primary" type="submit">
@@ -61,7 +61,7 @@
 					      </button>
 					    </div>
 				    </div>
-				</form> <!-- search-wrap .end// -->
+				</form>
 			</div> <!-- col.// -->
 			<div class="col-xl-4 col-lg-4 col-md-6">
 				<div class="widgets-wrap float-md-right">
@@ -175,12 +175,5 @@
   </div> <!-- container .// -->
 </nav>
 </header> <!-- section-header.// -->
-
-
-<section class="section-pagetop bg-light">
-	<div class="container">
-		<h2 class="title-page">page content</h2>
-	</div> <!-- container .// -->
-</section>
 
 

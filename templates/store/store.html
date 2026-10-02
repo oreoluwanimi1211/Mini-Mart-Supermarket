@@ -11,7 +11,6 @@
 		{% else %}
 			<h2 class="title-page">Our Store</h2>
 		{% endif %}
-		
 	</div> <!-- container //  -->
 </section>
 <!-- ========================= SECTION INTRO END// ========================= -->
@@ -33,14 +32,28 @@
 		</header>
 		<div class="filter-content collapse show" id="collapse_1" style="">
 			<div class="card-body">
-				<form class="pb-3">
-				<div class="input-group">
-				  <input type="text" class="form-control" placeholder="Search">
-				  <div class="input-group-append">
-				    <button class="btn btn-light" type="button"><i class="fa fa-search"></i></button>
-				  </div>
-				</div>
-				</form>
+				<!-- <form action="{% url 'search' %}" class="search-header" method="GET">
+					<div class="input-group">
+			
+					<input type="text" class="form-control" placeholder="Search" name="keyword">
+				
+						<div class="input-group-append">
+					      <button class="btn btn-primary" type="submit">
+					        <i class="fa fa-search"></i> Search
+					      </button>
+					    </div>
+					</div>
+				</form> -->
+				<!-- <section class="section-pagetop bg">
+					<div class="container">
+						{% if 'search' in request.path %}
+							<h2 class="title-page">Search Result</h2>
+						{% else %}
+							<h2 class="title-page">Our Store</h2>
+						{% endif %}
+						
+					</div> container // 
+				</section> -->
 				
 				<ul class="list-menu">
 					<li><a href="{% url 'store' %}">All products</a></li>
@@ -49,19 +62,42 @@
 					{% endfor %}
 				</ul>
 
-			</div> <!-- card-body.// -->
-		</div>
+			</div>
+		 </div>
 
 
 	
-	<article class="filter-group">
+	<!-- article class="filter-group">
 		<header class="card-header">
 			<a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true" class="">
 				<i class="icon-control fa fa-chevron-down"></i>
 				<h6 class="title">Sizes </h6>
 			</a>
 		</header>
-		<div class="filter-content collapse show" id="collapse_4" style="">
+		<div class="row">
+			<div class="item-option-select">
+				<h6> choose color </h6>
+				<select name="color">
+					<option value="red">red</option>
+					<option value="blue">blue</option>
+					<option value="green">green</option>
+					<option value="yellow">yellow</option>
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="item-option-select">
+				<h6> choose size </h6>
+				<select name="size">
+					<option value="small">small</option>
+					<option value="medium">medium</option>
+					<option value="large">large</option>
+				</select>
+			</div>
+		</div> -->
+
+
+		<!-- <div class="filter-content collapse show" id="collapse_4" style="">
 			<div class="card-body">
 			  <label class="checkbox-btn">
 			    <input type="checkbox">
@@ -82,20 +118,26 @@
 			    <input type="checkbox">
 			    <span class="btn btn-light"> XXL </span>
 			  </label>
-		</div><!-- card-body.// -->
-		</div>
-	</article> <!-- filter-group .// -->
+		 </div>
+		</div> -->
+	<!-- </article> -->
 
-</div> <!-- card.// -->
+</div>
 
 	</aside> <!-- col.// -->
 	<main class="col-md-9">
 
-	<header class="border-bottom mb-4 pb-3">
-		<div class="form-inline">
-			<span class="mr-md-auto">{{ products_count }}<b> items found</b></span>
-		</div>
-	</header><!-- sect-heading -->
+<header class="border-bottom mb-4 pb-3">
+    <div class="form-inline">
+        {% if product_count == 0 %}
+            <span class="mr-md-auto"><b>No Available product for this category</b></span>
+        {% elif product_count == 1 %}
+            <span class="mr-md-auto">1 <b>item found</b></span>
+        {% else %}
+            <span class="mr-md-auto">{{ product_count }} <b>items found</b></span>
+        {% endif %}
+    </div>
+</header>
 
 <div class="row">
 	{% for product in products%}

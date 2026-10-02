@@ -3,10 +3,31 @@ from django.utils.text import slugify
 from category.models import Category
 from django.urls import reverse
 
-Variation_category_choice = (
-    ('color', 'color'),
-    ('size', 'size'),
-)
+
+# Size
+# Color
+# Fit
+# Length
+# Material
+# Pattern
+# Sleeve
+# Neckline
+# Waist
+# Rise
+# Closure
+# Pocket
+# Hood
+# Cuff
+# Collar
+# Thickness
+# Stretch
+# Occasion
+# Season
+# Gender
+# Brand
+# Clothing Type
+# Shoe Variations
+# Accessory Variation
 
 class Product(models.Model):
     product_name = models.CharField(max_length=255, unique=True)
@@ -29,22 +50,27 @@ class Product(models.Model):
         return str(self.product_name)
 
 class VariationManager(models.Manager):
-    def color(self):
+    def colors(self):
         return super(VariationManager, self).filter(variation_category='color', is_active=True)
     
-    def size(self):
+    def sizes(self):
         return super(VariationManager, self).filter(variation_category='size', is_active=True)
 
+Variation_category_choice = (
+    ('color', 'color'),
+    ('size', 'size'),
+
+)
 
 class Variation(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     variation_category = models.CharField(max_length=100, choices=Variation_category_choice)
     is_active = models.BooleanField(default=True)
-    variation_value = models.BooleanField(default=True)
+    variation_value = models.CharField(max_length=100, )
     created_date = models.DateTimeField(auto_now=True)
     time_added = models.TimeField(auto_now_add=True)
 
     objects = VariationManager()
 
     def __str__(self):
-        return self.variation_value
+        return str(self.variation_value)
