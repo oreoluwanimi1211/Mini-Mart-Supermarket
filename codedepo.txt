@@ -434,3 +434,21 @@
 	</div>
 </div>
 </td>
+
+
+<!-- <div class="mt-4" style="width: 95%; padding-top: 40px;">
+   
+    <ul class="messages">
+{% if messages %}
+        {% for message in messages%}
+        <div id="message" class="container">
+        <div {% if messages.tags %} class="alert alert-{{ messages.tags }}"{% endif %} role="alert">
+            <button type="button" class="btn-close" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+            {{ message }}
+        </div>
+        </div>
+        {% endfor %}
+{% endif %}
+    </ul>
+</div> -->

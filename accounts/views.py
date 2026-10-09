@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import UserRegistrationForm
-from .models import CustomUser
+from .models import CustomUser, UserProfile
 from django.contrib import messages, auth
 from django.contrib.auth import login, logout
 from .utils import send_verification_email, send_notification
@@ -9,11 +9,10 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.core.mail import EmailMessage
-
-
-
-
-
+from django.contrib.auth.decorators import login_required
+from  carts.views import _cart_id
+from  carts.models import Cart, CartItem
+from store.models import Variation, Product
 
 def registeruser(request):
     if request.user.is_authenticated:
@@ -39,7 +38,6 @@ def registeruser(request):
             )
             print(user)
             user.save()
-
             #send email
             mail_subject = 'please activate your account'
             email_template = 'accounts/emails/account_verification_email.html'
@@ -47,7 +45,7 @@ def registeruser(request):
             messages.success(request, 'your account has been register succesfully!')
 
 
-            return redirect('login')
+            # return redirect('login')
         else:
             print('invalid form')
             print(form.errors)
@@ -67,22 +65,65 @@ def login(request):
         user = auth.authenticate(email=email, password=password)
 
         if user is not None:
+            try:
+                cart = Cart.objects.get(cart_id=_cart_id(request))
+                is_cart_item_exist = CartItem.objects.filter(cart=cart).exists()
+                if is_cart_item_exist:
+                    cart_item = CartItem.objects.filter(cart=cart)
+                    
+                    # getting variation by cart id 
+                    product_variation = []
+                    for item in cart_item:
+                        variation = item.variations.all()
+                        product_variation.append(list(variation))
+                        
+                        # get the cart_item  from user to access it product variations
+                    cart_item = CartItem.objects.filter(user=user)
+                    existing_variation_list = []
+                    id = []
+                    for item in cart_item:
+                        existing_variation = item.variations.all()
+                        existing_variation_list.append(list(existing_variation))
+                        id.append(item.id)
+            
+                    for product in product_variation:
+                        if product in existing_variation_list:
+                            index = existing_variation_list.index(product)
+                            item_id = id[index]
+                            item = CartItem.objects.get(id=item_id)
+                            item.quantity += 1
+                            item.user = user
+                            item.save()
+                        else:
+                            cart_item = CartItem.objects.filter(cart=cart)
+                            for item in cart_item:
+                                item.user = user
+                                item.save()
+                        
+            except:
+                pass
             auth.login(request, user)
             messages.success(request, 'you are now logged in')
-            # return redirect('dashboard')
-            return redirect('store')
+            return redirect('dashboard')
+            # return redirect('store')
         else:
             messages.error(request, 'Invalid login credential')
             return redirect('login')
     return render(request, 'accounts/login.html')
 
+@login_required(login_url='login')
 def logout(request):
     auth.logout(request)
     return redirect('login')
 
-
+@login_required(login_url='login')
 def dashboard(request):
-    return render(request, 'accounts/dashboard.html')
+    userprofile = UserProfile.objects.get(user_id=request.user.id)
+    
+    context = {
+        'userprofile': userprofile,
+    }
+    return render(request, 'accounts/dashboard.html', context)
 
 def activate(request, uidb64, token):
     try:

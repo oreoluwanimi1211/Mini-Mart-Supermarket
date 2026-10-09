@@ -2,7 +2,8 @@ from django.db import models
 from django.utils.text import slugify
 from category.models import Category
 from django.urls import reverse
-
+from django.conf import settings
+from accounts.models import CustomUser
 
 # Size
 # Color
@@ -40,14 +41,34 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
     modifield_date = models.DateTimeField(auto_now=True)
-
+    # user_wishlist = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='user_wishlist', blank=True)
 
     def get_url(self):
         return reverse('product_detail', args=[self.category.slug, self.slug])
 
-
     def __str__(self):
         return str(self.product_name)
+
+class WishList(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='wishlist')
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateField(auto_now=True)
+    
+    def __str__(self):
+        return self.date_created
+
+class WishListItem(models.Model):
+    wishlist = models.ForeignKey(WishList, on_delete=models.CASCADE, related_name="items")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    date_added = models.DateTimeField(auto_now_add=True)
+    quantity = models.IntegerField()
+    
+    class Meta:
+        unique_together = ('wishlist', 'product')
+
+    def __str__(self):
+        return self.product.product_name
+    
 
 class VariationManager(models.Manager):
     def colors(self):

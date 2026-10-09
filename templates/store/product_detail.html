@@ -44,56 +44,6 @@
             <span class="text-muted">USD 562.65 incl. VAT</span> 
         </div> <!-- price-detail-wrap .// -->
 
-
-        <!-- <div class="form-row  mt-4">
-            <div class="form-group col-md flex-grow-0">
-                <div class="input-group mb-3 input-spinner">
-                    <div class="input-group-prepend">
-                    <button class="btn btn-light" type="button" id="button-plus"> + </button>
-                    </div>
-                    <input type="text" class="form-control" value="1">
-                    <div class="input-group-append">
-                    <button class="btn btn-light" type="button" id="button-minus"> &minus; </button>
-                    </div>
-                </div>
-            </div>  -->
-
-		<!-- <header class="card-header">
-			<a href="#" data-toggle="collapse" data-target="#collapse_4" aria-expanded="true" class="">
-				<i class="icon-control fa fa-chevron-down"></i>
-				<h6 class="title">Sizes </h6>
-			</a>
-		</header> -->
-
-		<!-- <div class="row">
-			<div class="col-md-12">
-            <div class="item-option-select">
-				<h6> Choose Colors </h6>
-				<select name="color" class="form-control" required>
-					<option value="" disabled selected >select</option>
-					{% for i in single_product.variation_set.all %}
-					<option value="{{ i.variation_value }}">{{ i.variation_value }}</option>
-					{% endfor %}
-				</select>
-                </div>
-			</div>
-		</div>
-        <br>
-		<div class="row">
-			<div class="col-md-12">
-                <div class="item-option-select">
-				<h6> Choose Sizes </h6>
-				<select name="size" class="form-control" required>
-					<option value="" disabled selected >select</option>
-					{% for i in single_product.variation_set.all %}
-					<option value="{{ i.variation_value | lower}}">{{ i.variation_value| capfirst }}</option>
-					{% endfor %}
-
-				</select>
-                </div>
-			</div>
-		</div>
-         -->
 		<hr>
 			<div class="row">
 				<div class="item-option-select">
@@ -126,8 +76,9 @@
 				<button type="submit"  class="btn btn-primary"><i class="fas fa-shopping-cart"></i> <span class="text">Add to cart</span></button>
 			{% endif%}
         </div> <!-- row.// -->
-
+		<a href="{% url 'add_to_wishlist' single_product.id %}" class="btn btn-light fw500" role="button" aria-disabled="true">Add to Wish List</a>
 </form>
+	
 		</main> <!-- col.// -->
 	</div> <!-- row.// -->
 

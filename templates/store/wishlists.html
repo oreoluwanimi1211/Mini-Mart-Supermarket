@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<h2>wishlist</h2>
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-content padding-y">
+<div class="container">
+{% for i in item %}
+<div class="row">
+	
+	<main class="col-md-9">
+
+		<article class="card">
+			<div class="card-body">
+
+			<div class="row">
+				<div class="col-md-6">
+					<figure class="itemside mb-4">
+						<div class="aside"><img src="{{ i.product.image.url }}" class="border img-md"></div>
+						<figcaption class="info">
+							<a href="#" class="title">{{ i.product.product_name }}</a>
+							<p class="price mb-2">${{ i.product.price }}</p>
+							<a href="{% url 'add_cart' wishlist.id %}" class="btn btn-secondary btn-sm"> Add to cart </a>
+							<a href="{% url 'remove_wishlist' wishlist.id %}" class="btn btn-danger btn-sm" data-toggle="tooltip" title="" data-original-title="Remove from wishlist"> <i class="fa fa-times"></i> </a>
+						</figcaption>
+					</figure>
+				</div> <!-- col.// -->
+			</div> <!-- card-body.// -->
+		</article>
+
+
+	</main> <!-- col.// -->
+</div>
+{% endfor %}
+</div> <!-- container .//  -->
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+
+{% endblock %}

@@ -1,11 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product
+from .models import Product, WishList, WishListItem
 from category.models import Category
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
 from carts.models import CartItem, Cart
 from carts.views import _cart_id
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+
 
 def store(request, category_slug=None):
     categories = None
@@ -62,3 +64,48 @@ def search(request):
         'product_count': product_count,
     }
     return render(request, 'store/store.html', context)
+
+# @login_required(login_url='login')
+# def add_to_wishlist(request, product_id):
+#     product = get_object_or_404(Product, id=product_id)
+#     if product.user_wishlist.filter(id=request.user.id).exists():
+#         product.user_wishlist.remove(request.user)
+#     else:
+#         product.user_wishlist.add(request.user)
+#     return HttpResponseRedirect(request.META["HTTP_REFERER"])
+
+# def wishlist(request):
+#         return render(request, 'store/wishlists.html')
+
+@login_required(login_url='login')
+def add_to_wishlist(request, product_id ):
+    
+    product = get_object_or_404( Product,id=product_id)
+    wishlist, create = WishList.objects.get_or_create(user=request.user)
+    wishlistitem = WishListItem.objects.get_or_create(
+        wishlist=wishlist,
+        product = product,
+    )
+    return redirect('wishlist')
+
+@login_required
+def remove_wishlist(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    wishlist = get_object_or_404(WishList, user=request.user)
+    wishlist_item = WishListItem.objects.filter(
+        product=product,
+        wishlist=wishlist,
+    )
+    wishlist_item.delete()
+    return redirect('wishlist')
+
+@login_required
+def wishlist(request):
+    wishlist, create = WishList.objects.get_or_create(user=request.user)
+    item = wishlist.items.select_related('product')
+   
+    context = {
+        'item':item,
+        'wishlist':wishlist,
+    }
+    return render(request, 'store/wishlists.html', context)
