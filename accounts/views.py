@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 from  carts.views import _cart_id
 from  carts.models import Cart, CartItem
 from store.models import Variation, Product
+import requests
 
 def registeruser(request):
     if request.user.is_authenticated:
@@ -104,7 +105,16 @@ def login(request):
                 pass
             auth.login(request, user)
             messages.success(request, 'you are now logged in')
-            return redirect('dashboard')
+            url = request.META.get('HTTP_REFERER') # will take your previous url from your redirecting page
+            try:
+                query = requests.utils.urlparse(url).query
+                # next = /cart/checkout/
+                params = dict(x.split('=') for x in query.split('&'))
+                if 'next' in params:
+                    nextpage = params['next']
+                    return redirect(nextpage)
+            except:
+                return redirect('dashboard')
             # return redirect('store')
         else:
             messages.error(request, 'Invalid login credential')

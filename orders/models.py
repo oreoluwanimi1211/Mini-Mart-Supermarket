@@ -3,7 +3,7 @@ from accounts.models import CustomUser
 from store.models import Variation
 from store.models import Product
 from django.core.validators import MinValueValidator
-
+import secrets
 
 class Payment(models.Model):
     user              = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -57,6 +57,18 @@ class Order(models.Model):
     paid = models.BooleanField(default=False)
     special_instructions = models.TextField(blank=True, null=True)
 
+    def save(self, *arg, **Kwargs):
+        if not self.ref:
+            refrence = secrets.token_hex(16)
+            self.ref = refrence
+        super(Order, self).save(*arg, **Kwargs)
+
+
+    def __str__(self):
+        return self.order_number
+           
+        
+    
 
 class OrderProduct(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
